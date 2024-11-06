@@ -33,7 +33,7 @@ export type ArticleParamsFormProps = {
 
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {	
-	const [ isOpen, setIsOpen ] = useState(false) 
+	const [ isMenuOpen, setisMenuOpen ] = useState(false) 
 	const [ articleState, setArticleState ] = useState(defaultArticleState)
 	const ArticleParamsFormRef = useRef<HTMLDivElement>(null)
 
@@ -59,7 +59,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	const handleEsc = (e: KeyboardEvent) => {
 		if (e.key === 'Escape') {
-			setIsOpen(false);
+			setisMenuOpen(false);
 			document.removeEventListener('keydown', handleEsc);
 			document.removeEventListener('mousedown', handleOutClick);
 		  }
@@ -68,11 +68,11 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	const handleOutClick = (e: MouseEvent) => {
 		const { target } = e;
-		if (isOpen && 
+		if (isMenuOpen && 
 			target instanceof Node && 
 			ArticleParamsFormRef.current && 
 			!ArticleParamsFormRef.current.contains(target)) {
-			setIsOpen(false);
+			setisMenuOpen(false);
 			document.removeEventListener('keydown', handleEsc);
 			document.removeEventListener('mousedown', handleOutClick);
 		}
@@ -85,14 +85,14 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	return (
 		<div ref={ArticleParamsFormRef}>
-			<ArrowButton isOpen={isOpen} onClick={() => {
-				if (isOpen){
+			<ArrowButton isOpen={isMenuOpen} onClick={() => {
+				if (isMenuOpen){
 					document.addEventListener('keydown', handleEsc);
 					document.addEventListener('mousedown', handleOutClick);
 				}
-				setIsOpen(!isOpen)
+				setisMenuOpen(!isMenuOpen)
 				}} />
-			<aside className={ isOpen ? clsx(styles.container, styles.container_open) : clsx(styles.container)}>
+			<aside className={ isMenuOpen ? clsx(styles.container, styles.container_open) : clsx(styles.container)}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 
 					<Text as={"h2"}  size={31} weight={800} uppercase={true} >Задайте параметры</Text>
