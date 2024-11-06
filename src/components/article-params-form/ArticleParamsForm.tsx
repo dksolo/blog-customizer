@@ -5,6 +5,7 @@ import { RadioGroup } from 'src/ui/radio-group';
 import { Select } from 'src/ui/select';
 import { Separator } from 'src/ui/separator';
 import { Text } from 'src/ui/text';
+import { useClose } from 'src/hooks/useClose';
 
 
 import { SyntheticEvent, useRef, useState } from 'react';
@@ -37,6 +38,16 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [ articleState, setArticleState ] = useState(defaultArticleState)
 	const ArticleParamsFormRef = useRef<HTMLDivElement>(null)
 
+	function closeMenu() {
+		setisMenuOpen(false);		
+	}
+
+	useClose({ 
+		isOpen: isMenuOpen, 
+		onClose: closeMenu, 
+		rootRef: ArticleParamsFormRef 
+	})
+
 
 	const handleSubmit = (event: SyntheticEvent) => {
 		event?.preventDefault();
@@ -56,43 +67,13 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	};
 
 
-
-	const handleEsc = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			setisMenuOpen(false);
-			document.removeEventListener('keydown', handleEsc);
-			document.removeEventListener('mousedown', handleOutClick);
-		  }
-	
-	}
-
-	const handleOutClick = (e: MouseEvent) => {
-		const { target } = e;
-		if (isMenuOpen && 
-			target instanceof Node && 
-			ArticleParamsFormRef.current && 
-			!ArticleParamsFormRef.current.contains(target)) {
-			setisMenuOpen(false);
-			document.removeEventListener('keydown', handleEsc);
-			document.removeEventListener('mousedown', handleOutClick);
-		}
-	} 
-
-	document.addEventListener('keydown', handleEsc);
-	document.addEventListener('mousedown', handleOutClick);
-
-
-
 	return (
 		<div ref={ArticleParamsFormRef}>
 			<ArrowButton isOpen={isMenuOpen} onClick={() => {
-				if (isMenuOpen){
-					document.addEventListener('keydown', handleEsc);
-					document.addEventListener('mousedown', handleOutClick);
-				}
 				setisMenuOpen(!isMenuOpen)
 				}} />
-			<aside className={ isMenuOpen ? clsx(styles.container, styles.container_open) : clsx(styles.container)}>
+				
+			<aside className={ isMenuOpen ? clsx(styles.container, styles.container_open) : styles.container}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 
 					<Text as={"h2"}  size={31} weight={800} uppercase={true} >Задайте параметры</Text>
